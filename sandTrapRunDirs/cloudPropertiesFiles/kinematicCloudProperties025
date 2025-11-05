@@ -1,0 +1,470 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  11
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      cloudProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+//type        cloud;
+
+solution
+{
+    active	    true;
+    coupled         false;
+    transient       yes;
+    cellValueSourceCorrection off;
+    //calcFrequency   1;
+    maxCo           0.1;
+    //maxTrackTime    0.01;
+
+    interpolationSchemes
+    {
+        rho         cell;
+        U           cellPoint;
+        muc          cell;
+	p		cell;
+       // alpha.water       cell;
+	curlUcDt	cellPointFace;
+    }
+
+    //averagingMethod dual;
+
+    integrationSchemes
+    {
+        U               Euler;
+    }
+
+    sourceTerms
+    {
+        //resetOnStartup	false;
+	schemes
+        {
+            U           semiImplicit 1;
+        }
+    }
+}
+
+constantProperties
+{
+    rho0            2650;
+}
+
+subModels
+{
+    particleForces
+    {
+        //ErgunWenYuDrag
+        //{
+        //    alphac alpha.water;
+        //}
+	sphereDrag;
+        gravity;
+	SaffmanMeiLiftForce{};
+    }
+
+    injectionModels
+    {
+	p1
+	{
+            type            manualInjection;
+            massTotal       8.67211e-5;
+            SOI             502;
+            parcelBasisType mass;
+	    U0              (0.3225 0 0);
+	    nParticle		500;
+	    positionsFile	positions.dat;
+	    uniformParcelSize	1;
+	    sizeDistribution
+	    {
+		type	fixedValue;
+		fixedValueDistribution
+		{
+			value	0.5e-3;
+		}
+	    }
+	}
+
+	p2
+        {
+            type            manualInjection;
+            massTotal       1.084015e-5;
+            //massFlowRate       0.0002265;
+            SOI             503;
+            parcelBasisType mass;
+            U0              (0.3225 0 0);
+            nParticle		500;
+	    positionsFile	positions.dat;
+	    uniformParcelSize	1;
+	    sizeDistribution
+            {
+                type    fixedValue;
+                fixedValueDistribution
+                {
+                        value   0.25e-3;
+                }
+            }
+        }
+        p3
+        {
+            type            manualInjection;
+            massTotal       2.341471e-6;
+            //massFlowRate       0.0003863;
+            SOI             504;
+            parcelBasisType mass;
+            U0              (0.3225 0 0);
+            nParticle		500;
+	    positionsFile	positions.dat;
+	    uniformParcelSize	1;
+	    sizeDistribution
+            {
+                type    fixedValue;
+                fixedValueDistribution
+                {
+                        value   0.15e-3;
+                }
+            }
+        }
+        p4
+        {
+            type            manualInjection;
+            massTotal       9.234061e-7;
+            //massFlowRate       0.0001015;
+            SOI             505;
+            parcelBasisType mass;
+            U0              (0.3225 0 0);
+            nParticle		500;
+	    positionsFile	positions.dat;
+	    uniformParcelSize	1;
+	    sizeDistribution
+            {
+                type    fixedValue;
+                fixedValueDistribution
+                {
+                        value   0.11e-3;
+                }
+            }
+        }
+        p5
+        {
+            type            manualInjection;
+            massTotal       2.926841e-7;
+            //massFlowRate       1.931e-5;
+            SOI             506;
+            parcelBasisType mass;
+            U0              (0.3225 0 0);
+            nParticle		500;     
+            positionsFile	positions.dat;
+	    uniformParcelSize	1;
+	    sizeDistribution
+            {
+                type    fixedValue;
+                fixedValueDistribution
+                {
+                        value   0.075e-3;
+                }
+            }
+        }
+        p6
+        {
+            type            manualInjection;
+            massTotal       1.032865e-7;
+            //massFlowRate       6.817e-6;
+            SOI             507;
+            parcelBasisType mass;
+            U0              (0.3225 0 0);
+            nParticle		500;     
+	    positionsFile	positions.dat;
+	    uniformParcelSize	1;
+            sizeDistribution
+            {
+                type    fixedValue;
+                fixedValueDistribution
+                {
+                        value   0.053e-3;
+                }
+            }
+        }
+        p7
+        {
+            type            manualInjection;
+            massTotal       2.403631e-8;
+            SOI             508;
+            parcelBasisType mass;
+            U0              (0.3225 0 0);
+            nParticle		500;    
+            positionsFile	positions.dat;
+	    uniformParcelSize	1;
+	    sizeDistribution
+            {
+                type    fixedValue;
+                fixedValueDistribution
+                {
+                        value   0.0326e-3;
+                }
+            }
+        }
+        p8
+        {
+            type            manualInjection;
+            massTotal       6.610315e-9;
+            SOI             509;
+            parcelBasisType mass;
+            U0              (0.3225 0 0);
+            //flowRateProfile constant 1;
+	    nParticle		500;
+            positionsFile	positions.dat;
+	    uniformParcelSize	1;
+	    sizeDistribution
+            {
+                type    fixedValue;
+                fixedValueDistribution
+                {
+                        value   0.0212e-3;
+                }
+            }
+        }
+
+        p9
+        {
+            type            manualInjection;
+            massTotal       1.355021e-9;
+            //massFlowRate       5.962e-8;
+            SOI             510;
+            parcelBasisType mass;
+            U0              (0.3225 0 0);
+            nParticle		500;
+	    positionsFile	positions.dat;
+	    uniformParcelSize	1;
+	    sizeDistribution
+            {
+                type    fixedValue;
+                fixedValueDistribution
+                {
+                        value   0.0125e-3;
+                }
+            }
+        }
+        p10
+        {
+            type            manualInjection;
+            massTotal       4.890855e-10;
+            //massFlowRate       1.614e-8;
+            SOI             511;
+            parcelBasisType mass;
+            U0              (0.3225 0 0);
+            nParticle		500;
+	    positionsFile	positions.dat;
+	    uniformParcelSize	1;
+	    sizeDistribution
+            {
+                type    fixedValue;
+                fixedValueDistribution
+                {
+                        value   0.0089e-3;
+                }
+            }
+        }
+        p11
+        {
+            type            manualInjection;
+            massTotal       1.818675e-10;
+            //massFlowRate       1.0002e-8;
+            SOI             512;
+            parcelBasisType mass;
+            U0              (0.3225 0 0);
+            nParticle		500;
+	    positionsFile	positions.dat;
+	    uniformParcelSize	1;
+	    sizeDistribution
+            {
+                type    fixedValue;
+                fixedValueDistribution
+                {
+                        value   0.0064e-3;
+                }
+            }
+        }
+        p12
+        {
+            type            manualInjection;
+            massTotal       5.515945e-11;
+            //massFlowRate       1.213e-9;
+            SOI             513;
+            parcelBasisType mass;
+            U0              (0.3225 0 0);
+            nParticle		500;
+	    positionsFile	positions.dat;
+	    uniformParcelSize	1;
+	    sizeDistribution
+            {
+                type    fixedValue;
+                fixedValueDistribution
+                {
+                        value   0.0043e-3;
+                }
+            }
+        }
+        p13
+        {
+            type            manualInjection;
+            massTotal       2.49321e-11;
+            //massFlowRate       1.9197e-9;
+            SOI             514;
+            parcelBasisType mass;
+            U0              (0.3225 0 0);
+            nParticle		500;
+	    positionsFile	positions.dat;
+	    uniformParcelSize	1;
+	    sizeDistribution
+            {
+                type    fixedValue;
+                fixedValueDistribution
+                {
+                        value   0.0033e-3;
+                }
+            }
+        }
+        p14
+        {
+            type            manualInjection;
+            massTotal       1.524211e-12;
+            //massFlowRate       1.0059e-10;
+            SOI             515;
+            parcelBasisType mass;
+            U0              (0.3225 0 0);
+            nParticle		500;
+	    positionsFile	positions.dat;
+	    uniformParcelSize	1;
+	    sizeDistribution
+            {
+                type    fixedValue;
+                fixedValueDistribution
+                {
+                        value   0.0013e-3;
+                }
+            }
+        }
+  
+    }
+
+    dispersionModel none;
+
+    patchInteractionModel localInteraction;
+
+    localInteractionCoeffs
+    {
+        patches
+        (
+            free_surface
+            {
+                type none;
+            }
+            walls
+            {
+                type rebound;
+                e    0.97;
+                mu   0.09;
+            }
+            inlet
+            {
+                type rebound;
+                e    0.97;
+                mu   0.09;
+            }
+            outlet
+            {
+                type escape;
+            }
+        );
+    }
+
+    heatTransferModel none;
+
+    surfaceFilmModel none;
+/*
+    packingModel implicit;
+
+    explicitCoeffs
+    {
+        particleStressModel
+        {
+            type HarrisCrighton;
+            alphaPacked 0.6;
+            pSolid 10.0;
+            beta 2.0;
+            eps 1.0e-7;
+        }
+        correctionLimitingMethod
+        {
+            type absolute;
+            e 0.9;
+        }
+    }
+
+    implicitCoeffs
+    {
+        alphaMin 0.0001;
+        rhoMin 1.0;
+        applyLimiting true;
+        applyGravity true;
+        particleStressModel
+        {
+            type HarrisCrighton;
+            alphaPacked 0.6;
+            pSolid 5.0;
+            beta 2.0;
+            eps 1.0e-2;
+        }
+    }
+*/
+    //dampingModel none;
+
+    //isotropyModel stochastic;
+
+    collisionModel	none;
+/*
+    stochasticCoeffs
+    {
+        timeScaleModel
+        {
+            type isotropic;
+            alphaPacked 0.6;
+            e 0.9;
+        }
+    }
+*/
+    stochasticCollisionModel none;
+
+    radiation off;
+}
+
+
+cloudFunctions
+{
+        patchPost1
+        {
+                type particlePostProcessing;
+                enabled true;
+                writeControl writeTime;
+                log yes;
+                clouds (cloud);
+                maxStoredParcels 550000;
+                patches (outlet);
+
+        }
+
+
+}
+
+
+// ************************************************************************* //
+

@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+
+# disable mpi no preset parameters warning
+
+export OMPI_MCA_btl=self,vader,tcp
+
+export OMPI_MCA_btl_openib_warn_no_device_params_found=0
+
+REMOTE_DIR=$1
+FLOW_RATE=$2
+
+cd ${REMOTE_DIR}
+
+set -euo pipefail
+
+pwd
+
+
+
+# cd ${REMOTE_DIR}
+
+cp system/controlDictSimple system/controlDict
+cp system/fvSchemesSimple system/fvSchemes
+
+echo "${FLOW_RATE}: Cleaning Case (just in case)..."
+
+./allclean
+
+
+echo "${FLOW_RATE}: Decomposing domain..."
+
+decomposePar > log.decomposePar
+
+echo "${FLOW_RATE}: Running simpleFOAM initialisation..."
+
+mpirun -np 14 simpleFoam -parallel > log.simpleFoam  
+
+wait
+
+cp system/controlDictKPF system/controlDict
+cp system/fvSchemesKPF system/fvSchemes
+
+
+echo "${FLOW_RATE}: Running particle tracking..."
+
+# Start solver
+mpirun -np 14 kinematicParcelFoam -parallel > log.KPF &
+PID=$!
+echo "${FLOW_RATE}: started solver PID=$PID"
+
+threshold=10000
+exitCode=0
+IDLE_TIMEOUT=15   # 15 seconds of no log activity
+lastActivity=$(date +%s)
+
+# Monitor log until solver exits
+while kill -0 "$PID" 2>/dev/null; do
+    if read -t 1 -r line <&3; then
+        lastActivity=$(date +%s)   # update activity timer
+        if [[ "$line" == Courant* ]]; then
+            maxVal=$(awk '{print $6}' <<< "$line")
+            maxVal=${maxVal//max:/}
+            if (( $(echo "$maxVal > $threshold" | bc -l) )); then
+                echo "${FLOW_RATE}: Courant number exceeded threshold: $maxVal"
+                kill "$PID" 2>/dev/null || true
+                exitCode=42
+                break
+            fi
+        fi
+    else
+        now=$(date +%s)
+        if (( now - lastActivity > IDLE_TIMEOUT )); then
+            echo "${FLOW_RATE}: No log activity for $IDLE_TIMEOUT seconds. Killing solver PID=$PID."
+            kill "$PID" 2>/dev/null || true
+            exitCode=43
+            break
+        fi
+    fi
+done 3< <(tail -n0 -f log.KPF)
+
+# Wait for solver to finish, capture exit if it wasn't killed
+wait "$PID" || true
+
+if [ ${exitCode} == 0 ]; then
+        tac log.KPF | grep 'escape' | awk -F'=' '{print $2}' | sed -n 1p | cut -d',' -f1 | tr -d ' ()' > efficiency_${FLOW_RATE}.txt
+
+else 
+        echo 70000 > efficiency_${FLOW_RATE}.txt
+
+fi
+
+echo "${FLOW_RATE}: Cleaning Case..."
+
+./allclean
+
+echo "${FLOW_RATE}: Finished"

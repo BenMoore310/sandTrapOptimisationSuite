@@ -1,0 +1,5 @@
+#!/bin/bash
+
+numberEfficiency=$( tac log.KPF | grep 'escape' | awk -F'=' '{print $2}' | sed -n 1p | cut -d',' -f1 | tr -d '()' )
+
+echo $numberEfficiency

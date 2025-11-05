@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+#enables job control
+set -m
+SERVER=$1
+
+FLOW_RATE=$2
+
+USER="bm424"
+REMOTE_DIR="/home/bm424/Projects/sandTrapRunDirs/${FLOW_RATE}"
+LOCAL_POLYMESH="/home/bm424/Projects/sandTrapShapeOptBenchmarking/qNEHVI/qNEHVICaseDir/constant/polyMesh"
+
+echo "Copying mesh files to ${SERVER} for flow rate ${FLOW_RATE}" 
+
+scp -r "${LOCAL_POLYMESH}" "${USER}@${SERVER}.ex.ac.uk:${REMOTE_DIR}/constant/"
+
+echo "Connecting to server: ${SERVER} for flow rate ${FLOW_RATE}"
+
+ssh  "${USER}@${SERVER}.ex.ac.uk" "source /usr/lib/openfoam/openfoam2506/etc/bashrc && ${REMOTE_DIR}/allrun ${REMOTE_DIR} ${FLOW_RATE}"
+
+# back on haydn
+
+scp "${USER}@${SERVER}.ex.ac.uk:${REMOTE_DIR}/efficiency_${FLOW_RATE}.txt" .
+
+exit

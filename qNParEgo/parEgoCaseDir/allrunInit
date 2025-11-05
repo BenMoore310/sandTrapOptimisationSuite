@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+echo 'Current Spline:'
+
+cp ../spline.txt .
+
+gnuplot -persist <<EOF 
+set terminal dumb 200 15
+plot 'spline.txt' with linespoints
+EOF
+
+
+echo 'Generating geometry and surface mesh...'
+
+#(
+#	source /home/bm424/Applications/SALOME-9.13.0-native-UB22.04-SRC/env_launch.sh
+#	which python3
+#	python3 -c "import sys; print(sys.version)"
+#)	
+
+#(
+#	env -i HOME=$HOME PATH=/usr/bin:/bin \
+#	source /home/bm424/Applications/SALOME-9.13.0-native-UB22.04-SRC/env_launch.sh
+#	/home/bm424/Applications/SALOME-9.13.0-native-UB22.04-SRC/salome -t sandTrapCreator.py > log.geomCreation
+#)
+
+
+/home/bm424/Applications/SALOME-9.11.0/salome -t sandTrapCreator.py > log.geomCreation
+
+# # COPY STL FILES FROM BASE RUN DIRECTORY BECAUSE THATS WHERE YOU'VE BEEN SAVING THEM........
+
+# cp -r ../../sandTrapCaseDir/surfaceMeshSTLs .
+
+cat surfaceMeshSTLs/*.stl > fullGeo.stl
+
+surfaceFeatureEdges fullGeo.stl fullGeo.fms -angle 10 > log.SFE
+
+echo 'Meshing Geometry...'
+
+cartesianMesh > log.cartesianMesh
+
+echo 'Improving mesh quality...'
+
+improveMeshQuality > log.improveMeshQuality1
+improveMeshQuality > log.improveMeshQuality2
+
+renumberMesh -overwrite > log.renumberMesh
+
+checkMesh > log.checkMesh
+echo 'Local cell count:'
+cat log.checkMesh | grep 'cells:'

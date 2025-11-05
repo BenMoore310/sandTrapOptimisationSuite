@@ -1,0 +1,158 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  6
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    p
+    {
+        solver          GAMG;
+        tolerance       1e-05;
+        relTol          0.01;
+        smoother        GaussSeidel;
+    }
+
+    U
+    {
+	solver		PBiCGStab;
+	preconditioner	DILU;
+	tolerance	1e-5;
+	relTol		0.01;	
+    }
+
+    UFinal
+    {
+        solver          PBiCG;
+        preconditioner  DILU;
+        tolerance       1e-6;
+        relTol          0;
+
+    }	    
+
+    pFinal
+    {
+        solver          GAMG;
+        tolerance       1e-6;
+        relTol          0;
+        smoother        GaussSeidel;
+    }
+
+    omega
+    {
+        solver          PBiCGStab;
+	preconditioner	DILU
+        tolerance       1e-05;
+        relTol          0.0;
+    }
+   
+
+    k
+    {
+	solver	        PBiCGStab;
+        preconditioner	DILU;
+	tolerance	1e-05;
+	relTol		0.0;	
+    }
+
+    kFinal	    
+    {
+        solver          PBiCGStab;
+        preconditioner  DILU;
+        tolerance       1e-06;
+        relTol          0.0;
+    }
+
+    omegaFinal
+    {
+        solver          PBiCGStab;
+        preconditioner  DILU;
+        tolerance       1e-06;
+        relTol          0.0;
+    }
+
+}
+PIMPLE
+{
+    nOuterCorrectors 2;
+    nCorrectors     4;
+    momentumPredictor yes;
+    nNonOrthogonalCorrectors 2;
+    pRefCell        0;
+    pRefValue       0;
+    residualControl
+    {
+	"(p|U|k|omega)"
+	{
+		tolerance	1e-5;
+		relTol		0;
+	}
+    }
+}
+
+SIMPLE
+{
+	nNonOrthoganalCorrectors	2;
+	residualControl
+	{
+		p	1e-5;
+		U	1e-5;
+		"(k|epsilon|omega|R)"	1e-5;
+	}
+
+}
+
+
+/*
+relaxationFactors
+{
+	p		0.3;
+	U		0.7;
+	k		0.7;
+	epsilon		0.7;
+	omega		0.7;
+	R		0.7;
+	nuTilda		0.7;
+}
+*/
+
+relaxationFactors
+{
+
+	fields
+	{
+		p	0.3;
+		pFinal	0.3;
+	}
+	equations
+	{
+		//p	0.3;
+		//U	0.7;
+		//"(k|omega|nuTilda)"	0.7;
+		//"(U|k|omega)Final"	1;
+		U	0.7;
+		UFinal	0.7;
+		"(k|omega|nuTilda|R|epsilon)"	0.7;
+		"(k|omega|nuTilda|R|epsilon)Final"	0.7;
+		p	0.3;
+		pFinal	0.3;
+
+
+
+	}
+}
+
+
+// ************************************************************************* //

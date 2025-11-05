@@ -1,0 +1,2 @@
+cat parEgo.log | grep 'New hypervolume' | awk -F':   ' '{print $2}' > parEgoHypervolumes.txt
+

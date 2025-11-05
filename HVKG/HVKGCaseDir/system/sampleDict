@@ -1,0 +1,64 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2306                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      sampleDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+type	sets;
+libs	("libOpenFOAM.so");
+setFormat	raw;
+
+surfaceFormat	vtk;
+
+interpolationScheme	cell;
+
+fields
+(
+	Conc01
+	Conc02
+	Conc03
+	Conc045
+);
+
+sets
+(
+	point_a
+	{
+		type uniform;
+		axis z;
+		start	(9.25 0.5 0);
+		end	(9.25 0.5 1.54);
+		nPoints	154;
+	}
+
+
+        point_b
+        {
+                type uniform;
+                axis z;
+                start   (14.75 0.5 0);
+                end     (14.75 0.5 1.54);
+                nPoints 154;
+        }
+
+        point_c
+        {
+                type uniform;
+                axis z;
+                start   (19.25 0.5 0);
+                end     (19.25 0.5 1.54);
+                nPoints 154;
+        }
+
+);
+// ************************************************************************* //

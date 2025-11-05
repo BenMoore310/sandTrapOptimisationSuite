@@ -1,0 +1,11 @@
+**/*.stl
+**/polyMesh
+**/*.png
+**/processor*
+**/log.*
+**/*.gif
+**/__pycache__
+**/objtv*/*.txt
+**/nohup*
+**/postProcessing/**
+**/*.log
