@@ -1,2 +1,2 @@
-cat parEgo.log | grep 'New hypervolume' | awk -F':   ' '{print $2}' > parEgoHypervolumes.txt
+cat parEgo.log | grep 'INFO:qNParEgo.qNParEgoClassifier:New hypervolume:' | awk -F': ' '{print $2}' > parEgoHypervolumes.txt
 

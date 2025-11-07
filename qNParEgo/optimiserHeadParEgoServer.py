@@ -320,7 +320,6 @@ def main(numBasis, numObj, initialSamples, seed, classifierMC=False):
     np.savetxt("initTargetsFeas.txt", targetListFease)
     np.savetxt("initFeaturesFeas.txt", featureListFease)
 
-    np.savetxt("initFeas_list.txt", torch.Tensor.numpy(feas_list))
 
     # featureList = np.reshape(np.loadtxt('features.txt'), (numObj,(initialSamples),numBasis*2))
     featureList = np.loadtxt("initFeatures.txt")

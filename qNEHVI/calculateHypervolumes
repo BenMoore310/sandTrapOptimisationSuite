@@ -1,1 +1,1 @@
-cat log.qNEHVIServerTry2 | grep 'New hypervolume' | awk -F':   ' '{print $2}' > qNEHVIHypervolumes.txt
+cat qNEHVI.log | grep 'INFO:qNEHVI.qNEHVIClassifier:New hypervolume:' | awk -F': ' '{print $2}' > qNEHVIHypervolumes.txt
