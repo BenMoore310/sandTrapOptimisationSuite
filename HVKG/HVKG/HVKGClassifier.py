@@ -558,7 +558,7 @@ class HVKG:
                 except FileNotFoundError:
                     subprocess.run(
                         ["mkdir", f"objtv{i}"],
-                        cwd="/home/bm424/Projects/sandTrapShapeOptBenchmarking/HVKG/",
+                        cwd="/home/bm424/Projects/sandTrapOptimisationSuite/HVKG/",
                     )
                     np.savetxt(
                         f"objtv{i}/train_obj_hvkg_{iteration}.txt",

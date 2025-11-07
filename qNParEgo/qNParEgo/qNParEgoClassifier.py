@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 
 tkwargs = {
     "dtype": torch.double,
-    "device": torch.device("cuda" if torch.cuda.is_available() else "cpu"),
+    "device": torch.device("cpu"),
     # "device": "cpu",
 }
 SMOKE_TEST = os.environ.get("SMOKE_TEST")

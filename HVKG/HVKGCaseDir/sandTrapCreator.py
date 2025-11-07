@@ -41,7 +41,7 @@ geompy.addToStudy(Vertex_2, "Vertex_2")
 geompy.addToStudy(Vertex_3, "Vertex_3")
 
 
-tankBottomSpline = "/home/bm424/Projects/sandTrapShapeOptBenchmarking/HVKG/spline.txt"
+tankBottomSpline = "/home/bm424/Projects/sandTrapOptimisationSuite/HVKG/spline.txt"
 
 with open(tankBottomSpline, "r") as file:
     splineVertices = file.readlines()
@@ -84,17 +84,17 @@ Face_1 = geompy.MakeFaceWires([Wire_3], 1)
 
 
 Extrusion_4_step_1 = geompy.ImportSTEP(
-    "/home/bm424/Projects/sandTrapShapeOptBenchmarking/HVKG/cuttingFiles/Extrusion_4.step",
+    "/home/bm424/Projects/sandTrapOptimisationSuite/HVKG/cuttingFiles/Extrusion_4.step",
     False,
     True,
 )
 Extrusion_2_step_1 = geompy.ImportSTEP(
-    "/home/bm424/Projects/sandTrapShapeOptBenchmarking/HVKG/cuttingFiles/Extrusion_2.step",
+    "/home/bm424/Projects/sandTrapOptimisationSuite/HVKG/cuttingFiles/Extrusion_2.step",
     False,
     True,
 )
 Extrusion_3_step_1 = geompy.ImportSTEP(
-    "/home/bm424/Projects/sandTrapShapeOptBenchmarking/HVKG/cuttingFiles/Extrusion_3.step",
+    "/home/bm424/Projects/sandTrapOptimisationSuite/HVKG/cuttingFiles/Extrusion_3.step",
     False,
     True,
 )
@@ -114,17 +114,17 @@ geompy.addToStudy(Cut_1, "Cut_1")
 
 
 inletStep = geompy.ImportSTEP(
-    "/home/bm424/Projects/sandTrapShapeOptBenchmarking/HVKG/cuttingFiles/inlet.step",
+    "/home/bm424/Projects/sandTrapOptimisationSuite/HVKG/cuttingFiles/inlet.step",
     False,
     True,
 )
 freeSurfaceStep = geompy.ImportSTEP(
-    "/home/bm424/Projects/sandTrapShapeOptBenchmarking/HVKG/cuttingFiles/free_surface.step",
+    "/home/bm424/Projects/sandTrapOptimisationSuite/HVKG/cuttingFiles/free_surface.step",
     False,
     True,
 )
 outletStep = geompy.ImportSTEP(
-    "/home/bm424/Projects/sandTrapShapeOptBenchmarking/HVKG/cuttingFiles/outlet.step",
+    "/home/bm424/Projects/sandTrapOptimisationSuite/HVKG/cuttingFiles/outlet.step",
     False,
     True,
 )
@@ -204,7 +204,7 @@ walls = wholeGeo.GetMesh().CutListOfGroups(
 
 try:
     wholeGeo.ExportSTL(
-        r"/home/bm424/Projects/sandTrapShapeOptBenchmarking/HVKG/HVKGCaseDir/surfaceMeshSTLs/inlet.stl",
+        r"/home/bm424/Projects/sandTrapOptimisationSuite/HVKG/HVKGCaseDir/surfaceMeshSTLs/inlet.stl",
         1,
         inlet_2,
     )
@@ -213,7 +213,7 @@ except:
     print("ExportPartToSTL() failed. Invalid file name?")
 try:
     wholeGeo.ExportSTL(
-        r"/home/bm424/Projects/sandTrapShapeOptBenchmarking/HVKG/HVKGCaseDir/surfaceMeshSTLs/outlet.stl",
+        r"/home/bm424/Projects/sandTrapOptimisationSuite/HVKG/HVKGCaseDir/surfaceMeshSTLs/outlet.stl",
         1,
         outlet_2,
     )
@@ -222,7 +222,7 @@ except:
     print("ExportPartToSTL() failed. Invalid file name?")
 try:
     wholeGeo.ExportSTL(
-        r"/home/bm424/Projects/sandTrapShapeOptBenchmarking/HVKG/HVKGCaseDir/surfaceMeshSTLs/free_surface.stl",
+        r"/home/bm424/Projects/sandTrapOptimisationSuite/HVKG/HVKGCaseDir/surfaceMeshSTLs/free_surface.stl",
         1,
         free_surface_2,
     )
@@ -231,7 +231,7 @@ except:
     print("ExportPartToSTL() failed. Invalid file name?")
 try:
     wholeGeo.ExportSTL(
-        r"/home/bm424/Projects/sandTrapShapeOptBenchmarking/HVKG/HVKGCaseDir/surfaceMeshSTLs/walls.stl",
+        r"/home/bm424/Projects/sandTrapOptimisationSuite/HVKG/HVKGCaseDir/surfaceMeshSTLs/walls.stl",
         1,
         walls,
     )

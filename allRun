@@ -1,0 +1,6 @@
+cd HVKG
+nohup python3.11 optimiserHeadHVKGServer.py --numBasis 3 --numObj 3 --initialSamples 30 --seed 42 --classifierMC True &
+cd ../qNParEgo
+nohup python3.11 optimiserHeadParEgoServer.py --numBasis 3 --numObj 3 --initialSamples 30 --seed 42 --classifierMC True &
+cd ../qNEHVI
+nohup python3.11 optimiserHeadqNEHVIServer.py --numBasis 3 --numObj 3 --initialSamples 30 --seed 42 --classifierMC True &

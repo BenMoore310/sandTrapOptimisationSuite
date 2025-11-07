@@ -39,7 +39,7 @@ class DirichletGPModel(ExactGP):
 def GPTrain(trainx, trainy, training_iter=100):
     # initialize likelihood and model
     # we let the DirichletClassificationLikelihood compute the targets for us
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device("cpu")
     logger.info(f"training classifier on {device}")
 
     trainx = trainx.to(device)

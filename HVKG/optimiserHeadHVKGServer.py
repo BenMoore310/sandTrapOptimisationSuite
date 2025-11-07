@@ -96,7 +96,6 @@ def prepareRunDir(sample, numBasis, objective):
 
     STC.main(sample, numBasis)
 
-    # subprocess.run(["bash", "allrunInit"], cwd="/home/bm424/Projects/sandTrapShapeOptBenchmarking/qNParEgo/parEgoCaseDir", check=True)
     serverName = "cfd7"
 
     # objective_strings = ["0.025", "0.075", "1.125"]
@@ -106,7 +105,7 @@ def prepareRunDir(sample, numBasis, objective):
 
     process = subprocess.Popen(
         ["bash", "allrunInit", serverName, flowRate],
-        cwd="/home/bm424/Projects/sandTrapShapeOptBenchmarking/HVKG/HVKGCaseDir",
+        cwd="/home/bm424/Projects/sandTrapOptimisationSuite/HVKG/HVKGCaseDir",
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         text=True,
@@ -128,7 +127,7 @@ def simulateDesign(objective, successBool):
     Simulate the design using the current parameters.
     """
 
-    cwdPath = "/home/bm424/Projects/sandTrapShapeOptBenchmarking/HVKG"
+    cwdPath = "/home/bm424/Projects/sandTrapOptimisationSuite/HVKG"
 
     serverName = "cfd7"
 

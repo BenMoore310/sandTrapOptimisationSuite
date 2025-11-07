@@ -96,11 +96,10 @@ def prepareRunDir(sample, numBasis):
 
     STC.main(sample, numBasis)
 
-    # subprocess.run(["bash", "allrunInit"], cwd="/home/bm424/Projects/sandTrapShapeOptBenchmarking/qNParEgo/parEgoCaseDir", check=True)
 
     process = subprocess.Popen(
         ["bash", "allrunInit"],
-        cwd="/home/bm424/Projects/sandTrapShapeOptBenchmarking/qNEHVI/qNEHVICaseDir",
+        cwd="/home/bm424/Projects/sandTrapOptimisationSuite/qNEHVI/qNEHVICaseDir",
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         text=True,
@@ -122,7 +121,7 @@ def simulateDesign(objective, sample, numBasis):
     Simulate the design using the current parameters.
     """
 
-    cwdPath = "/home/bm424/Projects/sandTrapShapeOptBenchmarking/qNEHVI"
+    cwdPath = "/home/bm424/Projects/sandTrapOptimisationSuite/qNEHVI"
 
     serverName = "cfd5"
 
@@ -194,131 +193,109 @@ def main(numBasis, numObj, initialSamples, seed, classifierMC=False):
     # uncomment from here for the initial solutions:
     #######################################################
 
-    # for i in range(numObj):
-    sampler = qmc.LatinHypercube(d=len(bounds), seed=seed + i)
+    # # for i in range(numObj):
+    # sampler = qmc.LatinHypercube(d=len(bounds), seed=seed + i)
 
-    # remember this is initial samples per objective, not in total
-    # init per obj should be 2*D + 1
+    # # remember this is initial samples per objective, not in total
+    # # init per obj should be 2*D + 1
 
-    samplesMC = sampler.random(n=2500)
+    # samplesMC = sampler.random(n=2500)
 
-    featureListFease = qmc.scale(samplesMC, lowBounds, highBounds)
+    # featureListFease = qmc.scale(samplesMC, lowBounds, highBounds)
 
-    # creates samples from which we then draw feasible solutions
-    samples = sampler.random(n=initialSamples * 10)
+    # # creates samples from which we then draw feasible solutions
+    # samples = sampler.random(n=initialSamples * 10)
 
-    # Scale samples to bounds
-    initialPopulation = qmc.scale(samples, lowBounds, highBounds)
-    logger.info(f"Initial population shape: {initialPopulation.shape}")
-    mask = classifierDummyEvalBool(initialPopulation)
+    # # Scale samples to bounds
+    # initialPopulation = qmc.scale(samples, lowBounds, highBounds)
+    # logger.info(f"Initial population shape: {initialPopulation.shape}")
+    # mask = classifierDummyEvalBool(initialPopulation)
 
-    mask = []
+    # mask = []
 
-    for sample in initialPopulation:
-        boolFease = classifierDummyEvalBool(np.reshape(sample, (numBasis, 2)))
-        mask.append(boolFease)
+    # for sample in initialPopulation:
+    #     boolFease = classifierDummyEvalBool(np.reshape(sample, (numBasis, 2)))
+    #     mask.append(boolFease)
 
-    # print(mask)
-    validInitPop = initialPopulation[mask]
+    # # print(mask)
+    # validInitPop = initialPopulation[mask]
 
-    # print(validInitPop.shape)
+    # # print(validInitPop.shape)
 
-    # final initial population is the maximin of the validInitPop
+    # # final initial population is the maximin of the validInitPop
 
-    idx = greedyMaximin(validInitPop, initialSamples)
+    # idx = greedyMaximin(validInitPop, initialSamples)
 
-    initialPopulation = validInitPop[idx]
+    # initialPopulation = validInitPop[idx]
 
-    logger.info(f"initialPopulation: {initialPopulation}")
+    # logger.info(f"initialPopulation: {initialPopulation}")
 
-    if classifierMC == True:
-        # feas_list = torch.empty((0,1), dtype=torch.float32)
-        for sample in featureListFease:
-            # print("sample", sample)
-            # print(sample.shape)
-            # print(np.reshape(sample, (numBasis,2)))
+    # if classifierMC == True:
+    #     # feas_list = torch.empty((0,1), dtype=torch.float32)
+    #     for sample in featureListFease:
+    #         # print("sample", sample)
+    #         # print(sample.shape)
+    #         # print(np.reshape(sample, (numBasis,2)))
 
-            # call STC and generate spline from current sample
+    #         # call STC and generate spline from current sample
 
-            isFeas = classifierDummyEval(np.reshape(sample, (numBasis, 2)))
+    #         isFeas = classifierDummyEval(np.reshape(sample, (numBasis, 2)))
 
-            # print('isFeas = ', isFeas)
-            # sample = np.reshape(np.array(numberEfficiencies), (1,numObj))
-            # print(targetListFease.shape, isFeas.shape)
-            targetListFease = np.append(targetListFease, isFeas)
+    #         # print('isFeas = ', isFeas)
+    #         # sample = np.reshape(np.array(numberEfficiencies), (1,numObj))
+    #         # print(targetListFease.shape, isFeas.shape)
+    #         targetListFease = np.append(targetListFease, isFeas)
 
-        # print('Feas list: ', featureListFease)
+    #     # print('Feas list: ', featureListFease)
 
-        # np.savetxt('initFeas_list.txt', torch.Tensor.numpy())
+    #     # np.savetxt('initFeas_list.txt', torch.Tensor.numpy())
 
-    # initialPopulation = featureList
-    testedSample = 1
-    for sample in initialPopulation:
-        logger.info(f"sample {sample}")
-        logger.info(f"Sample Number = {testedSample}")
-        # print(sample.shape)
-        # print(np.reshape(sample, (numBasis,2)))
+    # # initialPopulation = featureList
+    # testedSample = 1
+    # for sample in initialPopulation:
+    #     logger.info(f"sample {sample}")
+    #     logger.info(f"Sample Number = {testedSample}")
+    #     # print(sample.shape)
+    #     # print(np.reshape(sample, (numBasis,2)))
 
-        # call STC and generate spline from current sample
+    #     # call STC and generate spline from current sample
 
-        nSims = numObj
-        # print('266')
+    #     nSims = numObj
+    #     # print('266')
 
-        prepareRunDir(sample, numBasis)
+    #     prepareRunDir(sample, numBasis)
 
-        with Pool(processes=nSims) as pool:
-            numberEfficiencies = pool.starmap(
-                simulateDesign, [(objIdx, sample, numBasis) for objIdx in range(numObj)]
-            )
+    #     with Pool(processes=nSims) as pool:
+    #         numberEfficiencies = pool.starmap(
+    #             simulateDesign, [(objIdx, sample, numBasis) for objIdx in range(numObj)]
+    #         )
 
-        # print('270')
-        numberEfficiencies = np.reshape(np.array(numberEfficiencies), (1, numObj))
-        logger.info(f"Returned efficiencies: {numberEfficiencies}")
+    #     # print('270')
+    #     numberEfficiencies = np.reshape(np.array(numberEfficiencies), (1, numObj))
+    #     logger.info(f"Returned efficiencies: {numberEfficiencies}")
 
-        # if any entries are 0, replace whole row with 0s
-        if np.any(numberEfficiencies == 0):
-            # numberEfficiencies = np.full((1,numObj), 0)
-            targetListFease = np.append(targetListFease, 0)
-            featureListFease = np.vstack((featureListFease, sample))
-        else:
-            targetListFease = np.append(targetListFease, 1)
-            targetList = np.vstack((targetList, numberEfficiencies))
-            featureListFease = np.vstack((featureListFease, sample))
-            featureList = np.vstack((featureList, sample))
+    #     # if any entries are 0, replace whole row with 0s
+    #     if np.any(numberEfficiencies == 0):
+    #         # numberEfficiencies = np.full((1,numObj), 0)
+    #         targetListFease = np.append(targetListFease, 0)
+    #         featureListFease = np.vstack((featureListFease, sample))
+    #     else:
+    #         targetListFease = np.append(targetListFease, 1)
+    #         targetList = np.vstack((targetList, numberEfficiencies))
+    #         featureListFease = np.vstack((featureListFease, sample))
+    #         featureList = np.vstack((featureList, sample))
 
-        testedSample += 1
+    #     testedSample += 1
 
-        # print(featureList.shape)
-        # print(featureListFease.shape)
-        # print(targetList.shape)
-        # print(targetListFease.shape)
 
-        # if any entries are nan, replace whole row with nans
-        # if np.any(np.isnan(numberEfficiencies)):
-        #     numberEfficiencies = np.full((1,numObj), np.nan)
-        #     feas_list = torch.vstack((feas_list, torch.tensor([0])))
-        # else:
-        #     feas_list = torch.vstack((feas_list, torch.tensor([1])))
+    # logger.info("###########################################")
+    # logger.info("INITIAL SAMPLE COMPLETED")
+    # logger.info("###########################################")
 
-        # numberEfficiency = simulateDesign(numObj, sample, numBasis)
-
-        # targetList[objIdx] = np.append(targetList[objIdx], numberEfficiency)
-        # print(numberEfficiencies.shape)
-        # print(targetList.shape)
-
-        # print('Target list: ', targetList)
-        # print('Feature list: ', featureList)
-        # print('Target Feas list: ', targetListFease)
-        # print('Feature Fease list: ', featureListFease)
-
-    logger.info("###########################################")
-    logger.info("INITIAL SAMPLE COMPLETED")
-    logger.info("###########################################")
-
-    np.savetxt("initTargets.txt", targetList)
-    np.savetxt("initFeatures.txt", featureList)
-    np.savetxt("initTargetsFeas.txt", targetListFease)
-    np.savetxt("initFeaturesFeas.txt", featureListFease)
+    # np.savetxt("initTargets.txt", targetList)
+    # np.savetxt("initFeatures.txt", featureList)
+    # np.savetxt("initTargetsFeas.txt", targetListFease)
+    # np.savetxt("initFeaturesFeas.txt", featureListFease)
 
     featureList = np.loadtxt("initFeatures.txt")
     targetList = np.loadtxt("initTargets.txt")

@@ -8,7 +8,7 @@ FLOW_RATE=$2
 
 USER="bm424"
 REMOTE_DIR="/home/bm424/Projects/sandTrapRunDirs/${FLOW_RATE}"
-LOCAL_POLYMESH="/home/bm424/Projects/sandTrapShapeOptBenchmarking/qNEHVI/qNEHVICaseDir/constant/polyMesh"
+LOCAL_POLYMESH="/home/bm424/Projects/sandTrapOptimisationSuite/qNEHVI/qNEHVICaseDir/constant/polyMesh"
 
 echo "Copying mesh files to ${SERVER} for flow rate ${FLOW_RATE}" 
 

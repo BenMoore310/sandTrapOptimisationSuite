@@ -44,7 +44,7 @@ def GPTrain(trainx, trainy, training_iter=100):
 
     trainx = trainx.to(device)
     trainy = trainy.to(device)
-    print(trainx.dtype)
+    # print(trainx.dtype)
 
     likelihood = DirichletClassificationLikelihood(
         trainy, learn_additional_noise=True
