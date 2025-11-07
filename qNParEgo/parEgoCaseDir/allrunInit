@@ -25,7 +25,7 @@ echo 'Generating geometry and surface mesh...'
 #)
 
 
-/home/bm424/Applications/SALOME-9.11.0/salome -t sandTrapCreator.py > log.geomCreation
+/home/bm424/Applications/SALOME-9.13.0-native-UB24.04-SRC/salome  -t sandTrapCreator.py > log.geomCreation
 
 # # COPY STL FILES FROM BASE RUN DIRECTORY BECAUSE THATS WHERE YOU'VE BEEN SAVING THEM........
 
