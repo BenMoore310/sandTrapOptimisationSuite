@@ -186,7 +186,7 @@ def main(numBasis, numObj, initialSamples, seed, classifierMC=False):
     #     low=0, high=6, size=(initialSamples), dtype=int
     # )
 
-    lbX = 3.7
+    lbX = 3.75
     lbY = -1.54
 
     # x upper limit reduced from 23.5 to 21 to stop generation of designs which asymptote downwards towards outlet (unmeshable but valid)

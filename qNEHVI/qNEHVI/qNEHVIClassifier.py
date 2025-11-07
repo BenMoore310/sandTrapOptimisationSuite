@@ -243,6 +243,8 @@ class qNEHVI:
         logger.info("###########################################")
         logger.info("BEGINNING OF qNEHVI OPTIMISER")
         logger.info("###########################################")
+        totalTimeInitial = time.monotonic()
+
 
         hvs_qnehvi = []
 
@@ -292,8 +294,11 @@ class qNEHVI:
         hvs_qnehvi.append(volume)
 
         # run N_BATCH rounds of BayesOpt after the initial random batch
-        for iteration in range(1, self.N_BATCH + 1):
-            t0 = time.monotonic()
+
+        iteration = 1
+        while iteration < self.N_BATCH:
+        # for iteration in range(1, self.N_BATCH + 1):
+            iterationTimeInitial = time.monotonic()
 
             # print(mll_qnehvi)
 
@@ -325,12 +330,15 @@ class qNEHVI:
                 logger.info("New point is infeasible")
                 train_x_fease = torch.cat([train_x_fease, new_x_qnehvi])
                 train_obj_fease = torch.cat([train_obj_fease, torch.tensor([0])])
+                iteration -= 1
+                completeIter = False
             else:
                 logger.info("New point is feasible")
                 train_x_fease = torch.cat([train_x_fease, new_x_qnehvi])
                 train_obj_fease = torch.cat([train_obj_fease, torch.tensor([1])])
                 train_x_qnehvi = torch.cat([train_x_qnehvi, new_x_qnehvi])
                 train_obj_qnehvi = torch.cat([train_obj_qnehvi, new_obj_qnehvi])
+                completeIter = True
 
             # update training points
             # train_x_qnehvi = torch.cat([train_x_qnehvi, new_x_qnehvi])
@@ -389,9 +397,13 @@ class qNEHVI:
                 train_x_qnehvi, train_obj_qnehvi, train_x_fease, train_obj_fease
             )
 
-            t1 = time.monotonic()
+            iterationTimeFinal = time.monotonic()
 
-            if verbose:
-                logger.info(f"Iteration {iteration}, Iteration time = {t1-t0:>4.2f}.")
-            # else:
-            #     logger.info(".", end="")
+            if completeIter == True:
+                logger.info(f"Iteration time: {iterationTimeFinal - iterationTimeInitial}")
+
+            iteration += 1
+
+        logger.info('Optimisation Complete')
+        totalTimeFinal = time.monotonic()
+        logger.info(f'Total time: {totalTimeFinal - totalTimeInitial}')

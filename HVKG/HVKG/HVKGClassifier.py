@@ -368,6 +368,8 @@ class HVKG:
         logger.info("BEGINNING OF HVKG OPTIMISER")
         logger.info("###########################################")
 
+        totalTimeInitial = time.monotonic()
+
         # print("Using device:", tkwargs["device"])
         # print("Torch version", torch.__version__)
 
@@ -487,8 +489,10 @@ class HVKG:
         logger.info(f"New Estimated Hypervolume: {hvs_hvkg[-1]}")
         # run N_BATCH rounds of BayesOpt after the initial random batch
         # active_algos = {k for k, v in total_cost.items() if v < self.COST_BUDGET}
-        for iteration in range(1, self.N_BATCH + 1):
-            t0 = time.monotonic()
+        iteration = 1
+        while iteration < self.N_BATCH:
+        # for iteration in range(1, self.N_BATCH + 1):
+            iterationTimeInitial = time.monotonic()
 
             (
                 new_x_hvkg,
@@ -537,9 +541,11 @@ class HVKG:
             hvs_hvkg.append(hv)
             logger.info(f"New Estimated Hypervolume: {hv}")
 
-            t1 = time.monotonic()
-            if verbose:
-                logger.info(f"Iteration {iteration}, Iteration time = {t1-t0:>4.2f}.")
+            iterationTimeFinal = time.monotonic()
+
+            logger.info(f"Iteration time: {iterationTimeFinal - iterationTimeInitial}")
+            # if verbose:
+            #     logger.info(f"Iteration {iteration}, Iteration time = {t1-t0:>4.2f}.")
 
             # for each list in train_objv_hvkg_list, save the list as a text file
             for i, train_objv_hvkg in enumerate(train_obj_hvkgList):
@@ -570,7 +576,6 @@ class HVKG:
             np.savetxt("train_x_fease", train_x_fease.cpu().numpy())
             np.savetxt("train_obj_fease", train_obj_fease.cpu().numpy())
 
-            iteration += 1
             np.savetxt(
                 f"HVKG/HVKGModelParetoFronts/features/featuresIter{iteration}.txt",
                 features.cpu().numpy(),
@@ -583,5 +588,10 @@ class HVKG:
                 f"HVKG/HVKGModelParetoFronts/uncertainties/stdIter{iteration}.txt",
                 stddv.cpu().numpy(),
             )
+            iteration += 1
+
 
             # active_algos = {k for k, v in total_cost.items() if v < self.COST_BUDGET}
+        logger.info('Optimisation Complete')
+        totalTimeFinal = time.monotonic()
+        logger.info(f'Total time: {totalTimeFinal - totalTimeInitial}')

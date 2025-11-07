@@ -174,6 +174,7 @@ class qNParEgo:
         logger.info("###########################################")
         logger.info("BEGINNING OF qNParEgo OPTIMISER")
         logger.info("###########################################")
+        totalTimeInitial = time.monotonic()
 
         hvs_qNParEgo = []
 
@@ -223,8 +224,10 @@ class qNParEgo:
         hvs_qNParEgo.append(volume)
 
         # run N_BATCH rounds of BayesOpt after the initial random batch
-        for iteration in range(1, self.N_BATCH + 1):
-            t0 = time.monotonic()
+        iteration = 1
+        while iteration < self.N_BATCH:
+        # for iteration in range(1, self.N_BATCH + 1):
+            iterationTimeInitial = time.monotonic()
 
             # print(mll_qnehvi)
 
@@ -253,15 +256,18 @@ class qNParEgo:
             # print(new_x_qnehvi.shape)
 
             if torch.any(new_obj_parego == 0):
-                logger.info("New point is infeasible")
+                logger.info("New point is infeasible - re-running iteration")
                 train_x_fease = torch.cat([train_x_fease, new_x_parego])
                 train_obj_fease = torch.cat([train_obj_fease, torch.tensor([0])])
+                iteration -= 1
+                completeIter = False
             else:
                 logger.info("New point is feasible")
                 train_x_fease = torch.cat([train_x_fease, new_x_parego])
                 train_obj_fease = torch.cat([train_obj_fease, torch.tensor([1])])
                 train_x_parego = torch.cat([train_x_parego, new_x_parego])
                 train_obj_parego = torch.cat([train_obj_parego, new_obj_parego])
+                completeIter = True
 
             # update training points
             # train_x_qnehvi = torch.cat([train_x_qnehvi, new_x_qnehvi])
@@ -320,14 +326,23 @@ class qNParEgo:
                 train_x_parego, train_obj_parego, train_x_fease, train_obj_fease
             )
 
-            t1 = time.monotonic()
 
-            if verbose:
-                logger.info(
-                    f"\nBatch {iteration:>2}: Hypervolume (qNParEgo) = "
-                    f"({hvs_qNParEgo[-1]:>4.2f}), "
-                    f"time = {t1-t0:>4.2f}.",
-                    end="",
-                )
-            else:
-                logger.info(".", end="")
+            iterationTimeFinal = time.monotonic()
+            if completeIter == True:
+                logger.info(f"Iteration time: {iterationTimeFinal - iterationTimeInitial}")
+
+            iteration += 1
+
+            # if verbose:
+            #     logger.info(
+            #         f"\nBatch {iteration:>2}: Hypervolume (qNParEgo) = "
+            #         f"({hvs_qNParEgo[-1]:>4.2f}), "
+            #         f"time = {t1-t0:>4.2f}.",
+            #         end="",
+            #     )
+            # else:
+            #     logger.info(".", end="")
+        logger.info('Optimisation Complete')
+        totalTimeFinal = time.monotonic()
+        logger.info(f'Total time: {totalTimeFinal - totalTimeInitial}')
+
